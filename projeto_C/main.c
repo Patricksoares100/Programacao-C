@@ -12,134 +12,126 @@
 typedef struct
 {
     char nome_participante[50], escola_participante[10], email_participante[30];
-    int nif_participante, contacto_participante, id_part;
+    int nif_participante, contacto_participante, id_parti;
 } participantes;
 
 typedef struct
 {
     char designacao_atividade[30], local_atividade[20], tipo_atividade[20], assoc_estudantes[10];
-    int datahora_atividade;
-    float valor;
-} atividade;
+    int datahora_atividade, id_ativi;
+    float valor_atividade;
+} atividades;
 
 typedef struct
 {
     int id_participante, id_atividade, datahora_inscricao;
     float valor_pago;
-} inscricao;
+} inscricoes;
+
 
 
 //DECLARAÇO DAS FUNÇÕES
-int main_menu();
-int menu_consulta_regista_participante();
-int menu_consulta_regista_atividades();
-int menu_consulta_regista_inscricoes();
-int menu_estatisticas();
-/*int id (int id_minimo, int id_maximo);*/
+int menu_consulta_regista_participante(participantes participante[], int id_participante);  //FUNÇÕES PARA OS PARTICIPANTES
+int registar_participante(participantes participante[], int id_participante);
+void consultar_participante(participantes participante[], int id_participante);
+
+int menu_consulta_regista_atividades(atividades atividade[], int id_atividade);  //FUNÇÕES PARA AS ATIVIDADES
+int registar_atividade(atividades atividade[], int id_atividade);
+void consultar_atividade(atividades atividade[], int id_atividade);
+
+int menu_consulta_regista_inscricoes();  //FUNÇÕES PARA AS INSCRIÇÕES
+
+int menu_estatisticas();  //FUNÇÕES PARA AS ESTATISTICAS
 
 
 //INICIO DA FUNÇÃO MAIN
 int main()
 {
-    int opcao;
-    participantes participante[10];/*definir a constante*/
-    int id_participante = 0;
+    int opcao, id_participante = 0, id_atividade = 0;
+    participantes participante[maximo_participantes];/*definir a constante*/
+    atividades atividade[maximo_atividades];
+    inscricoes inscricao[maximo_inscricoes];
 
-    do{
-    printf("\n\t\t\t\t\tM  E  N  U \n\n");
-    printf("Escolha a opcao:\n\n");
-    printf("1 - Registar / consultar dados dos participantes.\n");
-    printf("2 - Registar / consultar dados das atividades.\n");
-    printf("3 - Registar / consultar dados das inscricoes.\n");
-    printf("4 - Estatisticas.\n");
-    printf("0 - Sair.\n");
-    scanf("%d", &opcao);
-
-    switch(opcao)
+    do
     {
-    case 1:
-        menu_consulta_regista_participante(participante, id_participante);
-        break;
+        printf("\n\t\t\t\t\tM  E  N  U \n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Registar / consultar dados dos participantes.\n");
+        printf("2 - Registar / consultar dados das atividades.\n");
+        printf("3 - Registar / consultar dados das inscricoes.\n");
+        printf("4 - Estatisticas.\n");
+        printf("0 - Sair.\n\n");
+        scanf("%d", &opcao);
 
-    case 2:
-        menu_consulta_regista_atividades();
-        break;
+        switch(opcao)
+        {
+        case 1:
+            menu_consulta_regista_participante(participante, id_participante);
+            break;
 
-    case 3:
-        menu_consulta_regista_inscricoes();
-        break;
+        case 2:
+            menu_consulta_regista_atividades(atividade, id_atividade);
+            break;
 
-    case 4:
-        menu_estatisticas();
-        break;
+        case 3:
+            menu_consulta_regista_inscricoes();
+            break;
 
-    case 0:
-        printf("\n\n A sair do programa!\n");
-        break;
+        case 4:
+            menu_estatisticas();
+            break;
 
-    default:
-        printf("\nInsira uma opcao valida!\n");
-        return opcao;
+        case 0:
+            printf("\n\n A sair do programa!\n");
+            break;
+
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
     }
-    }while(opcao != 0);
-
-    /*        struct participantes alunos[maximo_participantes];
-            int i;
-
-            for (i=0; i<maximo_participantes; i++)
-            {
-                printf("\nInsira o seu nome.");
-                fgets(alunos[i].nome_participante);
-            }*/
-
-    /*struct atividade ve_atividade;
-      struct inscricao ve_inscricao;*/
+    while(opcao < 0 || opcao > 4);
 }
 
-
-//FUNÇÃO MENU PRINCIPAL
-int main_menu(void)
-{
-
-
-}
 
 
 //FUNÇÃO MENU DOS REGISTOS E DAS CONSULTAS DOS PARTICIPANTES
 int menu_consulta_regista_participante(participantes participante[], int id_participante)
 {
-    int opcao;
-    int id_part;
+    int opcao, id_parti;
 
-    do{
-    printf("\n\t\tR E G I S T A R / C O N S U L T A R   P A R T I C I P A N T E S\n\n");
-    printf("Escolha a opcao:\n\n");
-    printf("1 - Registar.\n");
-    printf("2 - Consultar.\n");
-    printf("0 - Sair.\n");
-    scanf("%d", &opcao);
-
-    switch(opcao)
+    do
     {
-    case 1:
-        id_part = registar_participante(participante, id_participante);
-        break;
+        printf("\n\t\tR E G I S T A R / C O N S U L T A R   P A R T I C I P A N T E S\n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Registar.\n");
+        printf("2 - Consultar.\n");
+        printf("0 - Voltar.\n\n");
+        scanf("%d", &opcao);
 
-    case 2:
-        break;
+        switch(opcao)
+        {
+        case 1:
+            id_parti = registar_participante(participante, id_participante);
+            break;
 
-    case 0:
-        break;
+        case 2:
 
-    default:
-        printf("\nInsira uma opcao valida!\n");
-        return opcao;
+            break;
+
+        case 0:
+            return main();
+            break;
+
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
     }
-    }while(opcao != 3);  /*verificar se nao é while !=  0*/
+    while(opcao < 0 || opcao > 2);
 }
 
 //FUNÇÃO PARA FAZER O REGISTO DE CADA PARTICIPANTE QUE SE INSCREVER (id_participante++), É ATRIBUIDO O VALOR À VARIAVEL DO VETOR PARTICIPANTE DO TIPO PARTICIPANTES QUE DEVOLVE PARA A OUTRA FUNÇÃO COM O RETURN ?!? perguntar ao prof!
-int registar_participante(participantes participante[], int id_participante) {
+int registar_participante(participantes participante[], int id_participante)
+{
     printf("Insira o nome de participante: ");
     fflush(stdin);
     fgets(participante[id_participante].nome_participante, 50, stdin);
@@ -161,79 +153,138 @@ int registar_participante(participantes participante[], int id_participante) {
     return id_participante;
 }
 
-void consultar_participante(participantes participante[], int id_participante) {
+//FUNÇÃO PARA CONSULTAR OS PARTICIPANTES
+void consultar_participante(participantes participante[], int id_participante)
+{
+    int cont;
 
+    for (cont=0; cont <= id_participante; cont++)
+    {
+        printf("\nID do participante: %d", participante[id_participante]);
+        printf("\nNome: %s", participante[id_participante].nome_participante);
+        printf("\nEscola: %s", participante[id_participante].escola_participante);
+        printf("\nE-mail: %s", participante[id_participante].email_participante);
+        printf("\nNIF: %d", participante[id_participante].nif_participante);
+        printf("\nContacto: %d", participante[id_participante].contacto_participante);
+    }
 }
+
+
 
 //FUNÇÃO MENU DOS REGISTOS E DAS CONSULTAS DAS ATIVIDADES
-int menu_consulta_regista_atividades()
+int menu_consulta_regista_atividades(atividades atividade[], int id_atividade)
 {
-    int opcao;
+    int opcao, id_ativi;
 
-    do{
-    printf("\n\t\tR E G I S T A R / C O N S U L T A R   A T I V I D A D E S\n\n");
-    printf("Escolha a opcao:\n\n");
-    printf("1 - Registar.\n");
-    printf("2 - Consultar.\n");
-    printf("3 - Voltar ao menu principal.\n");
-    printf("0 - Sair.\n");
-    scanf("%d", &opcao);
-
-    switch(opcao)
+    do
     {
-    case 1:
-        break;
+        printf("\n\t\tR E G I S T A R / C O N S U L T A R   A T I V I D A D E S\n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Registar.\n");
+        printf("2 - Consultar.\n");
+        printf("0 - Voltar.\n\n");
+        scanf("%d", &opcao);
 
-    case 2:
-        break;
+        switch(opcao)
+        {
+        case 1:
+            id_ativi = registar_atividade(atividade, id_atividade);
+            break;
 
-    case 3:
-        break;
+        case 2:
 
-    case 0:
-        break;
+            break;
 
-    default:
-        printf("\nInsira uma opcao valida!\n");
-        return opcao;
+        case 0:
+            return main();
+            break;
+
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
     }
-    }while(opcao != 3);
+    while(opcao < 0 || opcao > 2);
 }
+
+//FUNÇÃO PARA FAZER OS REGISTOS DE CADA ATIVIDADE QUE EXISTIR (id_atividade++)
+int registar_atividade(atividades atividade[], int id_atividade)
+{
+    printf("\nInsira a designação da atividade: ");
+    fflush(stdin);
+    fgets(atividade[id_atividade].designacao_atividade, 30, stdin);
+
+    printf("\nIndique o local da atividade: ");
+    fgets(atividade[id_atividade].local_atividade, 20, stdin);
+
+    printf("\nQual o tipo de atividade: ");
+    fgets(atividade[id_atividade].tipo_atividade, 20, stdin);
+
+    printf("\nAssociacao de estudantes organizadora: ");
+    fgets(atividade[id_atividade].assoc_estudantes, 10, stdin);
+
+    printf("\nInsira o montante pago: ");
+    scanf("%.2f", &atividade[id_atividade].valor_atividade);
+
+    printf("\Hora da atividade: 10:00 H");
+    //estruturar melhor este print pois é para digitar a hora? a hora aparecer consoante o tipo de evento? qual o tipo de dados int, float...?
+
+
+    id_atividade++;
+    return id_atividade;
+}
+
+//FUNÇÃO PARA CONSULTAR OS PARTICIPANTES
+void consultar_atividade(atividades atividade[], int id_atividade)
+{
+    int cont;
+
+    for (cont=0; cont <= id_atividade; cont++)
+    {
+        printf("\nID da atividade: %d", atividade[id_atividade]);
+        printf("\nDesignacao da atividade: %s", atividade[id_atividade].designacao_atividade);
+        printf("\nData e hora da atividade: 10:00 H "/*%d, atividade[id_atividade].datahora_atividade*/);
+        printf("\nLocal: %s", atividade[id_atividade].local_atividade);
+        printf("\nTipo de atividade: %s", atividade[id_atividade].tipo_atividade);
+        printf("\nAssociacao de estudantes organizadora: %s", atividade[id_atividade].assoc_estudantes);
+        printf("\nMontante pago pela inscricao: %.2f", atividade[id_atividade].valor_atividade);
+    }
+}
+
 
 
 //FUNÇÃO MENU DOS REGISTOS E DAS CONSULTAS DAS INSCRIÇÕES
 int menu_consulta_regista_inscricoes()
 {
     int opcao;
-    do{
-    printf("\n\t\tR E G I S T A R / C O N S U L T A R   I N S C R I C O E S\n\n");
-    printf("Escolha a opcao:\n\n");
-    printf("1 - Registar.\n");
-    printf("2 - Consultar.\n");
-    printf("3 - Voltar ao menu principal.\n");
-    printf("0 - Sair.\n");
-    scanf("%d", &opcao);
 
-    switch(opcao)
+    do
     {
-    case 1:
-        break;
+        printf("\n\t\tR E G I S T A R / C O N S U L T A R   I N S C R I C O E S\n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Registar.\n");
+        printf("2 - Consultar.\n");
+        printf("0 - Voltar.\n\n");
+        scanf("%d", &opcao);
 
-    case 2:
-        break;
+        switch(opcao)
+        {
+        case 1:
+            break;
 
-    case 3:
-        break;
+        case 2:
+            break;
 
-    case 0:
-        break;
+        case 0:
+            return main();
+            break;
 
-    default:
-        printf("\nInsira uma opcao valida!\n");
-        return opcao;
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
     }
-    }while(opcao != 3);
+    while(opcao < 0 || opcao > 2);
 }
+
 
 
 //FUNÇÃO MENU DAS ESTATISTICAS
@@ -241,67 +292,35 @@ int menu_estatisticas()
 {
     int opcao;
 
-    do{
-    printf("\n\t\t\t\tE S T A T I S T I C A S\n\n");
-    printf("Escolha a opcao:\n\n");
-    printf("1 - Numero de atividades realizadas por cada associacao.\n");
-    printf("2 - Percentagem de inscricoes por escola.\n");
-    printf("3 - Valor total das inscricoes.\n");
-    printf("4 - Voltar ao menu principal.\n");
-    printf("0 - Sair.\n");
-    scanf("%d", &opcao);
-
-    switch(opcao)
-    {
-    case 1:
-        break;
-
-    case 2:
-        break;
-
-    case 3:
-        break;
-
-    case 4:
-        break;
-
-    case 0:
-        break;
-
-    default:
-        printf("\nInsira uma opcao valida!\n");
-        return opcao;
-    }
-    }while(opcao != 4);
-}
-
-
-/*FUNÇÃO PARA CONSULTAR PARTICIPANTES
-int consula_participantes()
-{
-    printf("\nNome: ", alunos.nome_participante);
-    printf("Escola: ", alunos.escola_participante);
-    printf("E-mail: ", alunos.email_participante);
-    printf("NIF: ", alunos.nif_participante);
-    printf("Contacto: ", alunos.contacto_participante);
-}
-
-*/
-
-
-
-//FUN플O PARA CRIAR IDENTIFICADOR DOS PARTICIPANTES
-/*int id (int id_minimo, int id_maximo)
-{
-    int id;
     do
     {
-        printf("\nInsira um numero entre %d e %d:", id_minimo, id_maximo);
-        scanf("%d", &id);
+        printf("\n\t\t\t\tE S T A T I S T I C A S\n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Numero de atividades realizadas por cada associacao.\n");
+        printf("2 - Percentagem de inscricoes por escola.\n");
+        printf("3 - Valor total das inscricoes.\n");
+        printf("0 - Voltar.\n\n");
+        scanf("%d", &opcao);
+
+        switch(opcao)
+        {
+        case 1:
+            break;
+
+        case 2:
+            break;
+
+        case 3:
+            break;
+
+        case 0:
+            return main();
+            break;
+
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
     }
-    while(id < id_minimo || id > id_maximo);
-    return id;
-}*/
-
-
+    while(opcao < 0 || opcao > 3);
+}
 
