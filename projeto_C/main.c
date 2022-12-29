@@ -28,7 +28,7 @@ typedef struct
     float valor_pago;
 } inscricoes;
 
-
+//falta estruturas data/hora separadas!
 
 //DECLARAÇÃO DAS FUNÇÕES
 int menu_consulta_regista_participante(participantes participante[], int id_participante);  //FUNÇÕES PARA OS PARTICIPANTES
@@ -71,7 +71,7 @@ int main()
         switch(opcao)
         {
         case 1:
-            menu_consulta_regista_participante(participante, id_participante);
+            id_participante = menu_consulta_regista_participante(participante, id_participante);
             break;
 
         case 2:
@@ -98,7 +98,7 @@ int main()
             printf("\nInsira uma opcao valida!\n");
         }
     }
-    while(opcao < 0 || opcao > 5);
+    while(opcao != 0);
 }
 
 
@@ -106,7 +106,7 @@ int main()
 //FUNÇÃO MENU DOS REGISTOS E DAS CONSULTAS DOS PARTICIPANTES
 int menu_consulta_regista_participante(participantes participante[], int id_participante)
 {
-    int opcao, id_parti, cons_parti;
+    int opcao;
 
     do
     {
@@ -120,29 +120,29 @@ int menu_consulta_regista_participante(participantes participante[], int id_part
         switch(opcao)
         {
         case 1:
-            id_parti = registar_participante(participante, id_participante);
-            return participante, id_participante;
+            id_participante = registar_participante(participante, id_participante);
             break;
 
         case 2:
-            //cons_parti = consultar_participante(participante, id_participante);//variavel para atribuir a funcao de fazer ( = ) a consulta dos participantes
+            consultar_participante(participante, id_participante);
             break;
 
         case 0:
-            return main();
             break;
 
         default:
             printf("\nInsira uma opcao valida!\n");
         }
     }
-    while(opcao < 0 || opcao > 2);
-    return id_participante, participante;
+    while(opcao != 0);
+    return id_participante;
 }
 
 //FUNÇÃO PARA FAZER O REGISTO DE CADA PARTICIPANTE QUE SE INSCREVER (id_participante++), É ATRIBUIDO O VALOR À VARIAVEL DO VETOR PARTICIPANTE DO TIPO PARTICIPANTES QUE DEVOLVE PARA A OUTRA FUNÇÃO COM O RETURN ?!? perguntar ao prof!
 int registar_participante(participantes participante[], int id_participante)
 {
+    participante[id_participante].id_parti = id_participante;
+
     printf("Insira o nome de participante: ");
     fflush(stdin);
     fgets(participante[id_participante].nome_participante, 49, stdin);
@@ -160,7 +160,7 @@ int registar_participante(participantes participante[], int id_participante)
     scanf("%d", &participante[id_participante].contacto_participante);
 
     id_participante++;
-    return id_participante, participante;
+    return id_participante;
 }
 
 //FUNÇÃO PARA CONSULTAR OS PARTICIPANTES
@@ -170,12 +170,12 @@ void consultar_participante(participantes participante[], int id_participante)
 
     for (cont=0; cont < id_participante; cont++)
     {
-        printf("\nID do participante: %d", participante[id_participante]);
-        printf("\nNome: %s", participante[id_participante].nome_participante);
-        printf("\nEscola: %s", participante[id_participante].escola_participante);
-        printf("\nE-mail: %s", participante[id_participante].email_participante);
-        printf("\nNIF: %d", participante[id_participante].nif_participante);
-        printf("\nContacto: %d", participante[id_participante].contacto_participante);
+        printf("\nID do participante: %d", participante[cont].id_parti);
+        printf("\nNome: %s", participante[cont].nome_participante);
+        printf("\nEscola: %s", participante[cont].escola_participante);
+        printf("\nE-mail: %s", participante[cont].email_participante);
+        printf("\nNIF: %d", participante[cont].nif_participante);
+        printf("\nContacto: %d", participante[cont].contacto_participante);
     }
 }
 
@@ -236,7 +236,7 @@ int registar_atividade(atividades atividade[], int id_atividade)
     printf("\nInsira o montante pago: ");
     scanf("%.2f", &atividade[id_atividade].valor_atividade);
 
-    printf("\Hora da atividade: 10:00 H");
+    printf("\nHora da atividade: 10:00 H");
     //estruturar melhor este print pois é para digitar a hora? a hora aparecer consoante o tipo de evento? qual o tipo de dados int, float...?
 
     id_atividade++;
@@ -377,4 +377,3 @@ int menu_guardar_ler_dados()
 {
 
 }
-
