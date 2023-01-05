@@ -143,7 +143,7 @@ int registar_participante(participantes participante[], int id_participante)
 {
     participante[id_participante].id_parti = id_participante;
 
-    printf("Insira o nome de participante: ");
+    printf("\nInsira o nome de participante: ");
     fflush(stdin);
     fgets(participante[id_participante].nome_participante, 49, stdin);
 
@@ -170,12 +170,12 @@ void consultar_participante(participantes participante[], int id_participante)
 
     for (cont=0; cont < id_participante; cont++)
     {
-        printf("\nID do participante: %d", participante[cont].id_parti);
+        printf("\n\nID do participante: %d\n", participante[cont].id_parti);
         printf("\nNome: %s", participante[cont].nome_participante);
         printf("\nEscola: %s", participante[cont].escola_participante);
         printf("\nE-mail: %s", participante[cont].email_participante);
-        printf("\nNIF: %d", participante[cont].nif_participante);
-        printf("\nContacto: %d", participante[cont].contacto_participante);
+        printf("\nNIF: %d\n", participante[cont].nif_participante);
+        printf("\nContacto: %d\n\n", participante[cont].contacto_participante);
     }
 }
 
@@ -251,13 +251,13 @@ void consultar_atividade(atividades atividade[], int id_atividade)
 
     for (cont=0; cont < id_atividade; cont++)
     {
-        printf("\nID da atividade: %d", atividade[cont].id_ativi);
+        printf("\n\nID da atividade: %d\n", atividade[cont].id_ativi);
         printf("\nDesignacao da atividade: %s", atividade[cont].designacao_atividade);
-        printf("\nData e hora da atividade: 10:00 H "/*%d, atividade[id_atividade].datahora_atividade*/);
+        printf("\nData e hora da atividade: 10:00 H \n"/*%d, atividade[cont].datahora_atividade*/);
         printf("\nLocal: %s", atividade[cont].local_atividade);
         printf("\nTipo de atividade: %s", atividade[cont].tipo_atividade);
         printf("\nAssociacao de estudantes organizadora: %s", atividade[cont].assoc_estudantes);
-        printf("\nMontante pago pela inscricao: %.2f", atividade[cont].valor_atividade);
+        printf("\nMontante pago pela inscricao: %.2f\n\n", atividade[cont].valor_atividade);
     }
 }
 
@@ -326,11 +326,11 @@ void consultar_inscricoes(inscricoes inscricao[], int id_inscricao)
 
     for (cont=0; cont < id_inscricao; cont++)
     {
-        printf("\nID da inscricao: %d", inscricao[cont].id_inscri);
-        printf("\nID do participante: %d", inscricao[cont].id_participante);
-        printf("\nID da atividade: %d", inscricao[cont].id_atividade);
-        printf("\nMontante pago: %d",inscricao[cont].valor_pago);
-        printf("\nData e hora da inscricao: "/*inscricao[id_insscricao].datahora_inscricao*/);
+        printf("\n\nID da inscricao: %d\n", inscricao[cont].id_inscri);
+        printf("\nID do participante: %d\n", inscricao[cont].id_participante);
+        printf("\nID da atividade: %d\n", inscricao[cont].id_atividade);
+        printf("\nMontante pago: %d\n",inscricao[cont].valor_pago);
+        printf("\nData e hora da inscricao: \n"/*inscricao[id_insscricao].datahora_inscricao*/);
 
     }
 }
