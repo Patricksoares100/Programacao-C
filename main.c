@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <time.h>
 
 //DECLARAÇÃO DAS CONSTANTES
 #define maximo_participantes 5000  //MAXIMO PERMITIDO DE PARTICIPANTES
@@ -28,10 +28,18 @@ typedef struct
     float valor_pago;
 } inscricoes;
 
-//falta estruturas data/hora separadas!
+typedef struct
+{
+    int segundos, minutos, horas;
+} hora;
+
+typedef struct
+{
+    int dia, mes ,ano;
+} data;
 
 //DECLARAÇÃO DAS FUNÇÕES
-int menu_consulta_regista_participante(participantes participante[], int id_participante);  //FUNÇÕES PARA OS PARTICIPANTES
+int menu_consulta_regista_participantes(participantes participante[], int id_participante);  //FUNÇÕES PARA OS PARTICIPANTES
 int registar_participante(participantes participante[], int id_participante);
 void consultar_participante(participantes participante[], int id_participante);
 
@@ -41,11 +49,24 @@ void consultar_atividade(atividades atividade[], int id_atividade);
 
 int menu_consulta_regista_inscricoes(inscricoes inscricao[],int id_inscricao);  //FUNÇÕES PARA AS INSCRIÇÕES
 int registar_inscricao(inscricoes inscricao[], int id_inscricao);
-void consultar_inscricoes(inscricoes inscricao[], int id_inscricao);
+void consultar_inscricao(inscricoes inscricao[], int id_inscricao);
 
 int menu_estatisticas();  //FUNÇÕES PARA AS ESTATISTICAS
 
 int menu_guardar_ler_dados();  //FUNÇÕES PARA GUARDAR / LER DADOS
+
+int menu_guardar_ler_participante(participantes participante[], int id_participante);  //PARTICIPATNES
+void guardar_participante(participantes participante[], int id_participante);
+int ler_participante(participantes participante[]);
+
+int menu_guardar_ler_atividade(atividades atividade[], int id_atividade);  //ATIVIDADES
+void guardar_atividade(atividades atividade[], int id_atividade);
+int ler_atividade(atividades atividade[]);
+
+int menu_guardar_ler_inscricao(inscricoes inscricao[], int id_inscricao);  //INSCRICOES
+void guardar_inscricao(inscricoes inscricao[], int id_inscricao);
+int ler_inscricao(inscricoes inscricao[]);
+
 
 
 //INICIO DA FUNÇÃO MAIN
@@ -71,7 +92,7 @@ int main()
         switch(opcao)
         {
         case 1:
-            id_participante = menu_consulta_regista_participante(participante, id_participante);
+            id_participante = menu_consulta_regista_participantes(participante, id_participante);
             break;
 
         case 2:
@@ -104,7 +125,7 @@ int main()
 
 
 //FUNÇÃO MENU DOS REGISTOS E DAS CONSULTAS DOS PARTICIPANTES
-int menu_consulta_regista_participante(participantes participante[], int id_participante)
+int menu_consulta_regista_participantes(participantes participante[], int id_participante)
 {
     int opcao;
 
@@ -284,7 +305,7 @@ int menu_consulta_regista_inscricoes(inscricoes inscricao[], int id_inscricao)
             break;
 
         case 2:
-            consultar_inscricoes(inscricao, id_inscricao);
+            consultar_inscricao(inscricao, id_inscricao);
             break;
 
         case 0:
@@ -320,7 +341,7 @@ int registar_inscricao(inscricoes inscricao[], int id_inscricao)
 }
 
 //FUNÇÃO PARA CONSULTAR AS INSCRIÇÕES
-void consultar_inscricoes(inscricoes inscricao[], int id_inscricao)
+void consultar_inscricao(inscricoes inscricao[], int id_inscricao)
 {
     int cont;
 
@@ -363,19 +384,279 @@ int menu_estatisticas()
             break;
 
         case 0:
-            return main();
             break;
 
         default:
             printf("\nInsira uma opcao valida!\n");
         }
     }
-    while(opcao < 0 || opcao > 3);
+    while(opcao != 0);
 }
 
 
-//FUNÇÃO MENU GUARDAR / LER DADOS DE FICHEIROS BINÁRIOS
-int menu_guardar_ler_dados()
+//FUNÇÃO MENU GUARDAR / LER DADOS DE FICHEIROS BINÁRIOS DOS PARTICIPANTES, ATIVIDADES E INSCRICOES
+int menu_guardar_ler_dados(participantes participante[], atividades atividade[], inscricoes inscricao[], int id_participante, int id_atividade, int id_inscricao)
 {
+    int opcao;
 
+    do
+    {
+        printf("\n\t\t\t\tG U A R D A R / L E R   D A D O S\n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Participantes.\n");
+        printf("2 - Atividades.\n");
+        printf("3 - Inscricoes.\n");
+        printf("0 - Voltar.\n\n");
+        scanf("%d", &opcao);
+
+        switch(opcao)
+        {
+        case 1:
+            menu_guardar_ler_participante(participante, id_participante);
+            break;
+
+        case 2:
+            menu_guardar_ler_atividade(atividade, id_atividade);
+            break;
+
+        case 3:
+            menu_guardar_ler_inscricao(inscricao, id_inscricao);
+            break;
+
+        case 0:
+            break;
+
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
+    }
+    while(opcao != 0);
+}
+
+
+
+int menu_guardar_ler_participante(participantes participante[], int id_participante)
+{
+int opcao;
+
+    do
+    {
+        printf("\n\t\tG U A R D A R / L E R   P A R T I C I P A N T E S\n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Guardar Participantes.\n");
+        printf("2 - Ler Participantes.\n");
+        printf("0 - Voltar.\n\n");
+        scanf("%d", &opcao);
+
+        switch(opcao)
+        {
+        case 1:
+            guardar_participante(participante, id_participante);
+            break;
+
+        case 2:
+            ler_participante(participante);
+            break;
+
+        case 0:
+            break;
+
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
+    }
+    while(opcao != 0);
+    return id_participante;
+}
+
+void guardar_participante(participantes participante[], int id_participante)
+{
+    FILE *ficheiro;
+    ficheiro = fopen("participantes.bin","wb");
+    if (ficheiro == NULL)
+        printf("Nao foi possivel criar o ficheiro!");
+    else
+    {
+        fwrite(&id_participante, sizeof(int), 1, ficheiro);
+        fwrite(participante, sizeof(participantes), id_participante, ficheiro);
+        fclose(ficheiro);
+        printf("\nEscrita dos dados de %d participantes em ficheiro com sucesso.",
+               id_participante);
+    }
+}
+
+int ler_participante(participantes participante[])
+{
+    int id_participante, numero_alunos_lido;
+    FILE *ficheiro;
+    ficheiro = fopen("participantes.dat","rb");
+    if (ficheiro == NULL)
+        printf("Nao foi possivel abrir o ficheiro!");
+    else
+    {
+        fread(&id_participante, sizeof(int), 1, ficheiro);
+        numero_alunos_lido = fread(participante, sizeof(participantes), id_participante, ficheiro);
+        fclose(ficheiro);
+        if (numero_alunos_lido != id_participante)
+        {
+            id_participante = 0;
+            printf("Erro na leitura de dados do ficheiro!");
+        }
+        else
+            printf("\nLeitura dos dados de %d alunos de ficheiro com sucesso.", id_participante);
+        }
+
+    return id_participante;
+}
+
+
+
+int menu_guardar_ler_atividade(atividades atividade[], int id_atividade)
+{
+int opcao;
+
+    do
+    {
+        printf("\n\t\tG U A R D A R / L E R   A T I V I D A D E S\n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Guardar Atividades.\n");
+        printf("2 - Ler Atividades.\n");
+        printf("0 - Voltar.\n\n");
+        scanf("%d", &opcao);
+
+        switch(opcao)
+        {
+        case 1:
+            guardar_atividade(atividade, id_atividade);
+            break;
+
+        case 2:
+            ler_atividade(atividade);
+            break;
+
+        case 0:
+            break;
+
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
+    }
+    while(opcao != 0);
+    return id_atividade;
+}
+
+void guardar_atividade(atividades atividade[], int id_atividade)
+{
+    FILE *ficheiro;
+    ficheiro = fopen("atividades.bin","wb");
+    if (ficheiro == NULL)
+        printf("Nao foi possivel criar o ficheiro!");
+    else
+    {
+        fwrite(&id_atividade, sizeof(int), 1, ficheiro);
+        fwrite(atividade, sizeof(atividades), id_atividade, ficheiro);
+        fclose(ficheiro);
+        printf("\nEscrita dos dados de %d participantes em ficheiro com sucesso.",
+               id_atividade);
+    }
+}
+
+int ler_atividade(atividades atividade[])
+{
+    int id_atividade, numero_alunos_lido;
+    FILE *ficheiro;
+    ficheiro = fopen("atividades.dat","rb");
+    if (ficheiro == NULL)
+        printf("Nao foi possivel abrir o ficheiro!");
+    else
+    {
+        fread(&id_atividade, sizeof(int), 1, ficheiro);
+        numero_alunos_lido = fread(atividade, sizeof(atividades), id_atividade, ficheiro);
+        fclose(ficheiro);
+        if (numero_alunos_lido != id_atividade)
+        {
+            id_atividade = 0;
+            printf("Erro na leitura de dados do ficheiro!");
+        }
+        else
+            printf("\nLeitura dos dados de %d alunos de ficheiro com sucesso.", id_atividade);
+        }
+
+    return id_atividade;
+}
+
+
+
+int menu_guardar_ler_inscricao(inscricoes inscricao[], int id_inscricao)
+{
+    int opcao;
+
+    do
+    {
+        printf("\n\t\tG U A R D A R / L E R   I N S C R I C O E S\n\n");
+        printf("Escolha a opcao:\n\n");
+        printf("1 - Guardar Inscricoes.\n");
+        printf("2 - Ler Inscricoes.\n");
+        printf("0 - Voltar.\n\n");
+        scanf("%d", &opcao);
+
+        switch(opcao)
+        {
+        case 1:
+            guardar_inscricao(inscricao, id_inscricao);
+            break;
+
+        case 2:
+            ler_inscricao(inscricao);
+            break;
+
+        case 0:
+            break;
+
+        default:
+            printf("\nInsira uma opcao valida!\n");
+        }
+    }
+    while(opcao != 0);
+    return id_inscricao;
+}
+
+void guardar_inscricao(inscricoes inscricao[], int id_inscricao)
+{
+    FILE *ficheiro;
+    ficheiro = fopen("inscricoes.bin","wb");
+    if (ficheiro == NULL)
+        printf("Nao foi possivel criar o ficheiro!");
+    else
+    {
+        fwrite(&id_inscricao, sizeof(int), 1, ficheiro);
+        fwrite(inscricao, sizeof(inscricoes), id_inscricao, ficheiro);
+        fclose(ficheiro);
+        printf("\nEscrita dos dados de %d participantes em ficheiro com sucesso.",
+               id_inscricao);
+    }
+}
+
+int ler_inscricao(inscricoes inscricao[])
+{
+    int id_inscricao, numero_alunos_lido;
+    FILE *ficheiro;
+    ficheiro = fopen("inscricoes.dat","rb");
+    if (ficheiro == NULL)
+        printf("Nao foi possivel abrir o ficheiro!");
+    else
+    {
+        fread(&id_inscricao, sizeof(int), 1, ficheiro);
+        numero_alunos_lido = fread(inscricao, sizeof(inscricoes), id_inscricao, ficheiro);
+        fclose(ficheiro);
+        if (numero_alunos_lido != id_inscricao)
+        {
+            id_inscricao = 0;
+            printf("Erro na leitura de dados do ficheiro!");
+        }
+        else
+            printf("\nLeitura dos dados de %d alunos de ficheiro com sucesso.", id_inscricao);
+        }
+
+    return id_inscricao;
 }
