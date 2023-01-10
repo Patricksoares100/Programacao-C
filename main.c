@@ -8,6 +8,9 @@
 #define maximo_inscricoes 10000  //MAXIMO PERMITIDO DE INSCRICOES
 
 
+// declarar os numeros abaixos
+
+
 // DECLARAÇÃO DAS ESTRUTURAS
 typedef struct
 {
@@ -77,6 +80,8 @@ int main()
     atividades atividade[maximo_atividades];
     inscricoes inscricao[maximo_inscricoes];
 
+    //ler_inscricao(inscricoes);
+
     do
     {
         printf("\n\t\t\t\t\tM  E  N  U \n\n");
@@ -100,6 +105,7 @@ int main()
             break;
 
         case 3:
+
             menu_consulta_regista_inscricoes(inscricao, id_inscricao);
             break;
 
@@ -108,7 +114,7 @@ int main()
             break;
 
         case 5:
-            menu_guardar_ler_dados();
+            menu_guardar_ler_dados(participante, atividade, inscricao, id_participante, id_atividade, id_inscricao);
             break;
 
         case 0:
@@ -120,6 +126,7 @@ int main()
         }
     }
     while(opcao != 0);
+// gravar dados
 }
 
 
@@ -223,7 +230,11 @@ int menu_consulta_regista_atividades(atividades atividade[], int id_atividade)
             break;
 
         case 2:
-            consultar_atividade(atividade, id_atividade);
+            if(id_atividade==0)
+                printf("Registe uma ativida");
+            else
+                consultar_atividade(atividade, id_atividade);
+
             break;
 
         case 0:
@@ -403,24 +414,19 @@ int menu_guardar_ler_dados(participantes participante[], atividades atividade[],
     {
         printf("\n\t\t\t\tG U A R D A R / L E R   D A D O S\n\n");
         printf("Escolha a opcao:\n\n");
-        printf("1 - Participantes.\n");
-        printf("2 - Atividades.\n");
-        printf("3 - Inscricoes.\n");
+        printf("1 - Guardar Dados.\n");
+        printf("2 - Ler Dados.\n");
         printf("0 - Voltar.\n\n");
         scanf("%d", &opcao);
 
         switch(opcao)
         {
         case 1:
-            menu_guardar_ler_participante(participante, id_participante);
+            //menu_guardar_dados(participante, atividade, inscricao);
             break;
 
         case 2:
-            menu_guardar_ler_atividade(atividade, id_atividade);
-            break;
-
-        case 3:
-            menu_guardar_ler_inscricao(inscricao, id_inscricao);
+            //menu_ler_dados(participante, atividade, inscricao);
             break;
 
         case 0:
