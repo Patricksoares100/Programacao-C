@@ -6,22 +6,30 @@
 #define maximo_participantes 5000  //MAXIMO PERMITIDO DE PARTICIPANTES
 #define maximo_atividades 200  //MAXIMO PERMITIDO DE ATIVIDADES
 #define maximo_inscricoes 10000  //MAXIMO PERMITIDO DE INSCRICOES
-
-
-// declarar os numeros abaixos
+#define max_nome 50  //PERMITIDOS 50 CARCATERES PARA O NOME
+#define max_escola 10  //PERMITIDOS 10 CARACTERES PARA A ESCOLA/AE
+#define max_email 30  //PERMITIDOS 30 CARACTERES PARA O EMAIL
+#define min_nif 100000000  //NUMERO MINIMO PARA O NIF
+#define max_nif 999999999  //NUMERO MAXIMO PARA O NIF
+#define min_tlm 910000000  //NUMERO MINIMO PARA TELEMOVEL
+#define max_tlm 999999999  //NUMERO MAXIMO PARA TELEMOVEL
+#define min_tlf 210000000  //NUMERO MINIMO PARA TELEFONE
+#define max_tlf 299999999  //NUMERO MAXIMO PARA TELEFONE
+#define max_atividade 30  //PERMITIDOS 30 CARACTERES PARA A ATIVIDADE
+#define max_local_tipo 20  //PERMITIDOS 20 CARACTERES PARA O LOCAL E TIPO DE ATIVIDADE
 
 
 // DECLARAÇÃO DAS ESTRUTURAS
 typedef struct
 {
-    char nome_participante[50], escola_participante[10], email_participante[30];
+    char nome_participante[max_nome], escola_participante[max_escola], email_participante[max_email];
     int nif_participante, contacto_participante, id_parti;
 } participantes;
 
 typedef struct
 {
-    char designacao_atividade[30], local_atividade[20], tipo_atividade[20], assoc_estudantes[10];
-    int datahora_atividade/*falta buscar estes dados*/, id_ativi;
+    char designacao_atividade[max_atividade], local_atividade[max_local_tipo], tipo_atividade[max_local_tipo];
+    int datahora_atividade/*falta buscar estes dados*/, id_ativi, assoc_estudantes;
     float valor_atividade;
 } atividades;
 
@@ -42,35 +50,34 @@ typedef struct
 } data;
 
 //DECLARAÇÃO DAS FUNÇÕES
-int menu_consulta_regista_participantes(participantes participante[], int id_participante);  //FUNÇÕES PARA OS PARTICIPANTES
+int menu_consulta_regista_participantes(participantes participante[], int id_participante);  //FUNÇÕES PARA OS PARTICIPANTES, REGISTAR E CONSULTAR
 int registar_participante(participantes participante[], int id_participante);
 void consultar_participante(participantes participante[], int id_participante);
 
-int menu_consulta_regista_atividades(atividades atividade[], int id_atividade);  //FUNÇÕES PARA AS ATIVIDADES
+int menu_consulta_regista_atividades(atividades atividade[], int id_atividade);  //FUNÇÕES PARA AS ATIVIDADES, REGISTAR E CONSULTAR
 int registar_atividade(atividades atividade[], int id_atividade);
 void consultar_atividade(atividades atividade[], int id_atividade);
 
-int menu_consulta_regista_inscricoes(inscricoes inscricao[],int id_inscricao);  //FUNÇÕES PARA AS INSCRIÇÕES
+int menu_consulta_regista_inscricoes(inscricoes inscricao[],int id_inscricao);  //FUNÇÕES PARA AS INSCRIÇÕES, REGISTAR E CONSULTAR
 int registar_inscricao(inscricoes inscricao[], int id_inscricao);
 void consultar_inscricao(inscricoes inscricao[], int id_inscricao);
 
 int menu_estatisticas();  //FUNÇÕES PARA AS ESTATISTICAS
 
-int menu_guardar_ler_dados();  //FUNÇÕES PARA GUARDAR / LER DADOS
-
-int menu_guardar_ler_participante(participantes participante[], int id_participante);  //PARTICIPATNES
+void menu_guardar_ler_dados(participantes participante[], atividades atividade[], inscricoes inscricao[], int id_participante, int id_atividade, int id_inscricao);  //FUNÇÕES PARA GUARDAR / LER DADOS DOS
 void guardar_participante(participantes participante[], int id_participante);
 int ler_participante(participantes participante[]);
 
-int menu_guardar_ler_atividade(atividades atividade[], int id_atividade);  //ATIVIDADES
 void guardar_atividade(atividades atividade[], int id_atividade);
 int ler_atividade(atividades atividade[]);
 
-int menu_guardar_ler_inscricao(inscricoes inscricao[], int id_inscricao);  //INSCRICOES
 void guardar_inscricao(inscricoes inscricao[], int id_inscricao);
 int ler_inscricao(inscricoes inscricao[]);
 
+//void gravar_ficheiro(participantes vet_parti[], int id_parti, atividades vet_ativi[], int id_ativi, inscricoes vet_inscri[], int id_inscri);
+//void ler_ficheiro(participantes vet_parti[], int *id_parti, atividades vet_ativi[], int *id_ativi, inscricoes vet_inscri[], int *id_inscri);
 
+int menu_associacao_estudantes (void);  //FUNÇÃO PARA AS AE
 
 //INICIO DA FUNÇÃO MAIN
 int main()
@@ -80,7 +87,9 @@ int main()
     atividades atividade[maximo_atividades];
     inscricoes inscricao[maximo_inscricoes];
 
-    //ler_inscricao(inscricoes);
+    //ler_ficheiro(participante,  *id_participante);
+    //id_atividade = ler_dados(atividade, sizeof(atividades), maximo_atividades, "atividades.bin");
+    //id_inscricao = ler_dados(inscricao, sizeof(inscricoes), maximo_inscricoes, "inscricoes.bin");
 
     do
     {
@@ -101,16 +110,24 @@ int main()
             break;
 
         case 2:
-            menu_consulta_regista_atividades(atividade, id_atividade);
+            if (id_participante == 0)
+                printf("\nRegiste primeiro um participante!\n");
+            else
+                menu_consulta_regista_atividades(atividade, id_atividade);
             break;
 
         case 3:
-
-            menu_consulta_regista_inscricoes(inscricao, id_inscricao);
+            if (id_participante == 0 && id_atividade == 0)
+                printf("\nRegiste primeiro um participante e depois uma atividade!\n");
+            else
+                menu_consulta_regista_inscricoes(inscricao, id_inscricao);
             break;
 
         case 4:
-            menu_estatisticas();
+            if (id_participante == 0 && id_atividade  == 0 && id_inscricao == 0)
+                printf("\nRegiste primeiro um participante, uma atividade e uma inscricao!\n");
+            else
+                menu_estatisticas();
             break;
 
         case 5:
@@ -118,7 +135,17 @@ int main()
             break;
 
         case 0:
-            printf("\n\n A sair do programa!\n");
+             if (id_participante != 0 || id_atividade != 0 || id_inscricao != 0)
+            {
+                //guardar_dados(participante, sizeof(participantes), id_participante, "participantes.bin");
+               // guardar_dados(atividade, sizeof(atividades), id_atividade, "atividades.bin");
+               // guardar_dados(inscricao, sizeof(inscricoes), id_inscricao, "inscricoes.bin");
+                printf("\nGravacao de dados concluida com sucesso!\n");
+                printf("\n A sair do programa!\n");
+            }
+            else
+                printf("\nNao ha dados a serem guardados!\n");
+                printf("\n A sair do programa!\n");
             break;
 
         default:
@@ -126,7 +153,6 @@ int main()
         }
     }
     while(opcao != 0);
-// gravar dados
 }
 
 
@@ -148,11 +174,21 @@ int menu_consulta_regista_participantes(participantes participante[], int id_par
         switch(opcao)
         {
         case 1:
-            id_participante = registar_participante(participante, id_participante);
+            if (id_participante >= maximo_participantes)
+            {
+                printf("\nEsgotou o limite maximo de participantes!\n");
+            }
+            else
+                system("cls");
+                id_participante = registar_participante(participante, id_participante);
             break;
 
         case 2:
-            consultar_participante(participante, id_participante);
+            if (id_participante == 0)
+                printf("\nRegiste primeiro um participante!\n");
+            else
+                system("cls");
+                consultar_participante(participante, id_participante);
             break;
 
         case 0:
@@ -166,26 +202,28 @@ int menu_consulta_regista_participantes(participantes participante[], int id_par
     return id_participante;
 }
 
-//FUNÇÃO PARA FAZER O REGISTO DE CADA PARTICIPANTE QUE SE INSCREVER (id_participante++), É ATRIBUIDO O VALOR À VARIAVEL DO VETOR PARTICIPANTE DO TIPO PARTICIPANTES QUE DEVOLVE PARA A OUTRA FUNÇÃO COM O RETURN ?!? perguntar ao prof!
+//FUNÇÃO PARA FAZER O REGISTO DE CADA PARTICIPANTE QUE SE INSCREVER, É ATRIBUIDO O VALOR AOS ELEMENTOS DO VETOR PARTICIPANTE DO TIPO PARTICIPANTES QUE DEVOLVE PARA A OUTRA FUNÇÃO COM O RETURN
 int registar_participante(participantes participante[], int id_participante)
 {
     participante[id_participante].id_parti = id_participante;
 
     printf("\nInsira o nome de participante: ");
     fflush(stdin);
-    fgets(participante[id_participante].nome_participante, 49, stdin);
+    fgets(participante[id_participante].nome_participante, max_nome, stdin);
 
     printf("\nInsira a escola: ");
-    fgets(participante[id_participante].escola_participante, 9, stdin);
+    fgets(participante[id_participante].escola_participante, max_escola, stdin);
 
     printf("\nInsira o e-mail: ");
-    fgets(participante[id_participante].email_participante, 29, stdin);
+    fgets(participante[id_participante].email_participante, max_email, stdin);
 
     printf("\nInsira o seu NIF: ");
-    scanf("%d", &participante[id_participante].nif_participante);
+    scanf("%d", &participante[id_participante].nif_participante);                                   //----------> fazer do...while para validar nif?
+    /*if (participante[].nif_participante < min_nif || participante[].nif_participante > max_nif)
+        printf("\nInsira um numero de identificacao fiscal correto!\n");*/
 
     printf("\nInsira o seu contacto: ");
-    scanf("%d", &participante[id_participante].contacto_participante);
+    scanf("%d", &participante[id_participante].contacto_participante);                              //aqui tambem do...while?
 
     id_participante++;
     return id_participante;
@@ -226,13 +264,20 @@ int menu_consulta_regista_atividades(atividades atividade[], int id_atividade)
         switch(opcao)
         {
         case 1:
-            id_atividade = registar_atividade(atividade, id_atividade);
+            if (id_atividade >= maximo_atividades)
+            {
+                printf("\nEsgotou o limite maximo de atividades!\n");
+            }
+            else
+                system("cls");
+                id_atividade = registar_atividade(atividade, id_atividade);
             break;
 
         case 2:
-            if(id_atividade==0)
-                printf("Registe uma ativida");
+            if(id_atividade == 0)
+                printf("\nRegiste uma atividade!\n");
             else
+                system("cls");
                 consultar_atividade(atividade, id_atividade);
 
             break;
@@ -255,22 +300,24 @@ int registar_atividade(atividades atividade[], int id_atividade)
 
     printf("\nInsira a designacao da atividade: ");
     fflush(stdin);
-    fgets(atividade[id_atividade].designacao_atividade, 29, stdin);
+    fgets(atividade[id_atividade].designacao_atividade, max_atividade, stdin);
 
     printf("\nIndique o local da atividade: ");
-    fgets(atividade[id_atividade].local_atividade, 19, stdin);
+    fgets(atividade[id_atividade].local_atividade, max_local_tipo, stdin);
 
     printf("\nQual o tipo de atividade: ");
-    fgets(atividade[id_atividade].tipo_atividade, 19, stdin);
+    fgets(atividade[id_atividade].tipo_atividade, max_local_tipo, stdin);
 
-    printf("\nAssociacao de estudantes organizadora: ");
-    fgets(atividade[id_atividade].assoc_estudantes, 9, stdin);
+    atividade[id_atividade].assoc_estudantes = menu_associacao_estudantes();
+    printf("%d", atividade[id_atividade].assoc_estudantes);
+    //printf("\nAssociacao de estudantes organizadora: ");
+   // fgets(atividade[id_atividade].assoc_estudantes, max_escola, stdin);
 
     printf("\nInsira o montante pago: ");
     scanf("%.2f", &atividade[id_atividade].valor_atividade);
 
     printf("\nHora da atividade: 10:00 H");
-    //estruturar melhor este print pois é para digitar a hora? a hora aparecer consoante o tipo de evento? qual o tipo de dados int, float...?
+    //estruturar melhor este print pois é para digitar a hora? a hora aparecer consoante o tipo de evento?
     fflush(stdin);
     id_atividade++;
     return id_atividade;
@@ -288,7 +335,8 @@ void consultar_atividade(atividades atividade[], int id_atividade)
         printf("\nData e hora da atividade: 10:00 H \n"/*%d, atividade[cont].datahora_atividade*/);
         printf("\nLocal: %s", atividade[cont].local_atividade);
         printf("\nTipo de atividade: %s", atividade[cont].tipo_atividade);
-        printf("\nAssociacao de estudantes organizadora: %s", atividade[cont].assoc_estudantes);
+        printf("\nAssociacao de estudantes organizadora: ");
+        escolha_associacao(atividade[cont].assoc_estudantes);
         printf("\nMontante pago pela inscricao: %.2f\n\n", atividade[cont].valor_atividade);
     }
 }
@@ -312,11 +360,21 @@ int menu_consulta_regista_inscricoes(inscricoes inscricao[], int id_inscricao)
         switch(opcao)
         {
         case 1:
-            id_inscricao = registar_inscricao(inscricao, id_inscricao);
+            if (id_inscricao >= maximo_inscricoes)
+            {
+                printf("\nEsgotou o limite maximo de inscricoes!\n");
+            }
+            else
+                system("cls");
+                id_inscricao = registar_inscricao(inscricao, id_inscricao);
             break;
 
         case 2:
-            consultar_inscricao(inscricao, id_inscricao);
+            if (id_inscricao == 0)
+                printf("\nRegiste uma inscricao!\n");
+            else
+                system("cls");
+                consultar_inscricao(inscricao, id_inscricao);
             break;
 
         case 0:
@@ -362,10 +420,11 @@ void consultar_inscricao(inscricoes inscricao[], int id_inscricao)
         printf("\nID do participante: %d\n", inscricao[cont].id_participante);
         printf("\nID da atividade: %d\n", inscricao[cont].id_atividade);
         printf("\nMontante pago: %d\n",inscricao[cont].valor_pago);
-        printf("\nData e hora da inscricao: \n"/*inscricao[id_insscricao].datahora_inscricao*/);
+        printf("\nData e hora da inscricao: \n"/*inscricao[cont].datahora_inscricao*/);
 
     }
 }
+
 
 
 //FUNÇÃO MENU DAS ESTATISTICAS
@@ -375,6 +434,7 @@ int menu_estatisticas()
 
     do
     {
+        system("cls");
         printf("\n\t\t\t\tE S T A T I S T I C A S\n\n");
         printf("Escolha a opcao:\n\n");
         printf("1 - Numero de atividades realizadas por cada associacao.\n");
@@ -405,14 +465,16 @@ int menu_estatisticas()
 }
 
 
+
 //FUNÇÃO MENU GUARDAR / LER DADOS DE FICHEIROS BINÁRIOS DOS PARTICIPANTES, ATIVIDADES E INSCRICOES
-int menu_guardar_ler_dados(participantes participante[], atividades atividade[], inscricoes inscricao[], int id_participante, int id_atividade, int id_inscricao)
+void menu_guardar_ler_dados(participantes participante[], atividades atividade[], inscricoes inscricao[], int id_participante, int id_atividade, int id_inscricao)
 {
     int opcao;
 
     do
     {
-        printf("\n\t\t\t\tG U A R D A R / L E R   D A D O S\n\n");
+        printf("\n\t\t\t\tG U A R D A R / L E R   D A D O S \n\n");
+        printf("\t\tP A R T I C I P A N T E S  |  A T I V I D A D E S  |  I N S C R I C O E S\n\n");
         printf("Escolha a opcao:\n\n");
         printf("1 - Guardar Dados.\n");
         printf("2 - Ler Dados.\n");
@@ -422,12 +484,21 @@ int menu_guardar_ler_dados(participantes participante[], atividades atividade[],
         switch(opcao)
         {
         case 1:
-            //menu_guardar_dados(participante, atividade, inscricao);
-            break;
+            if (id_participante != 0 || id_atividade != 0 || id_inscricao != 0)
+            {
+                guardar_participante(participante, id_participante);
+                guardar_atividade(atividade, id_atividade);
+                guardar_inscricao (inscricao, id_inscricao);
+            }
+            else
+                printf("\nAinda nao ha dados para serem guardados!\n");
+                break;
 
         case 2:
-            //menu_ler_dados(participante, atividade, inscricao);
-            break;
+                ler_participante(participante);
+                ler_atividade(atividade);
+                ler_inscricao(inscricao);  // atividade, id_atividade, inscricao, id_inscricao);
+                break;
 
         case 0:
             break;
@@ -437,42 +508,6 @@ int menu_guardar_ler_dados(participantes participante[], atividades atividade[],
         }
     }
     while(opcao != 0);
-}
-
-
-
-int menu_guardar_ler_participante(participantes participante[], int id_participante)
-{
-int opcao;
-
-    do
-    {
-        printf("\n\t\tG U A R D A R / L E R   P A R T I C I P A N T E S\n\n");
-        printf("Escolha a opcao:\n\n");
-        printf("1 - Guardar Participantes.\n");
-        printf("2 - Ler Participantes.\n");
-        printf("0 - Voltar.\n\n");
-        scanf("%d", &opcao);
-
-        switch(opcao)
-        {
-        case 1:
-            guardar_participante(participante, id_participante);
-            break;
-
-        case 2:
-            ler_participante(participante);
-            break;
-
-        case 0:
-            break;
-
-        default:
-            printf("\nInsira uma opcao valida!\n");
-        }
-    }
-    while(opcao != 0);
-    return id_participante;
 }
 
 void guardar_participante(participantes participante[], int id_participante)
@@ -493,17 +528,17 @@ void guardar_participante(participantes participante[], int id_participante)
 
 int ler_participante(participantes participante[])
 {
-    int id_participante, numero_alunos_lido;
+    int id_participante, numero_participantes_lido;
     FILE *ficheiro;
-    ficheiro = fopen("participantes.dat","rb");
+    ficheiro = fopen("participantes.bin","rb");
     if (ficheiro == NULL)
         printf("Nao foi possivel abrir o ficheiro!");
     else
     {
         fread(&id_participante, sizeof(int), 1, ficheiro);
-        numero_alunos_lido = fread(participante, sizeof(participantes), id_participante, ficheiro);
+        numero_participantes_lido = fread(participante, sizeof(participantes), id_participante, ficheiro);
         fclose(ficheiro);
-        if (numero_alunos_lido != id_participante)
+        if (numero_participantes_lido != id_participante)
         {
             id_participante = 0;
             printf("Erro na leitura de dados do ficheiro!");
@@ -516,40 +551,6 @@ int ler_participante(participantes participante[])
 }
 
 
-
-int menu_guardar_ler_atividade(atividades atividade[], int id_atividade)
-{
-int opcao;
-
-    do
-    {
-        printf("\n\t\tG U A R D A R / L E R   A T I V I D A D E S\n\n");
-        printf("Escolha a opcao:\n\n");
-        printf("1 - Guardar Atividades.\n");
-        printf("2 - Ler Atividades.\n");
-        printf("0 - Voltar.\n\n");
-        scanf("%d", &opcao);
-
-        switch(opcao)
-        {
-        case 1:
-            guardar_atividade(atividade, id_atividade);
-            break;
-
-        case 2:
-            ler_atividade(atividade);
-            break;
-
-        case 0:
-            break;
-
-        default:
-            printf("\nInsira uma opcao valida!\n");
-        }
-    }
-    while(opcao != 0);
-    return id_atividade;
-}
 
 void guardar_atividade(atividades atividade[], int id_atividade)
 {
@@ -569,17 +570,17 @@ void guardar_atividade(atividades atividade[], int id_atividade)
 
 int ler_atividade(atividades atividade[])
 {
-    int id_atividade, numero_alunos_lido;
+    int id_atividade, numero_atividades_lido;
     FILE *ficheiro;
-    ficheiro = fopen("atividades.dat","rb");
+    ficheiro = fopen("atividades.bin","rb");
     if (ficheiro == NULL)
         printf("Nao foi possivel abrir o ficheiro!");
     else
     {
         fread(&id_atividade, sizeof(int), 1, ficheiro);
-        numero_alunos_lido = fread(atividade, sizeof(atividades), id_atividade, ficheiro);
+        numero_atividades_lido = fread(atividade, sizeof(atividades), id_atividade, ficheiro);
         fclose(ficheiro);
-        if (numero_alunos_lido != id_atividade)
+        if (numero_atividades_lido != id_atividade)
         {
             id_atividade = 0;
             printf("Erro na leitura de dados do ficheiro!");
@@ -592,40 +593,6 @@ int ler_atividade(atividades atividade[])
 }
 
 
-
-int menu_guardar_ler_inscricao(inscricoes inscricao[], int id_inscricao)
-{
-    int opcao;
-
-    do
-    {
-        printf("\n\t\tG U A R D A R / L E R   I N S C R I C O E S\n\n");
-        printf("Escolha a opcao:\n\n");
-        printf("1 - Guardar Inscricoes.\n");
-        printf("2 - Ler Inscricoes.\n");
-        printf("0 - Voltar.\n\n");
-        scanf("%d", &opcao);
-
-        switch(opcao)
-        {
-        case 1:
-            guardar_inscricao(inscricao, id_inscricao);
-            break;
-
-        case 2:
-            ler_inscricao(inscricao);
-            break;
-
-        case 0:
-            break;
-
-        default:
-            printf("\nInsira uma opcao valida!\n");
-        }
-    }
-    while(opcao != 0);
-    return id_inscricao;
-}
 
 void guardar_inscricao(inscricoes inscricao[], int id_inscricao)
 {
@@ -645,17 +612,17 @@ void guardar_inscricao(inscricoes inscricao[], int id_inscricao)
 
 int ler_inscricao(inscricoes inscricao[])
 {
-    int id_inscricao, numero_alunos_lido;
+    int id_inscricao, numero_inscricoes_lido;
     FILE *ficheiro;
-    ficheiro = fopen("inscricoes.dat","rb");
+    ficheiro = fopen("inscricoes.bin","rb");
     if (ficheiro == NULL)
         printf("Nao foi possivel abrir o ficheiro!");
     else
     {
         fread(&id_inscricao, sizeof(int), 1, ficheiro);
-        numero_alunos_lido = fread(inscricao, sizeof(inscricoes), id_inscricao, ficheiro);
+        numero_inscricoes_lido = fread(inscricao, sizeof(inscricoes), id_inscricao, ficheiro);
         fclose(ficheiro);
-        if (numero_alunos_lido != id_inscricao)
+        if (numero_inscricoes_lido != id_inscricao)
         {
             id_inscricao = 0;
             printf("Erro na leitura de dados do ficheiro!");
@@ -666,3 +633,106 @@ int ler_inscricao(inscricoes inscricao[])
 
     return id_inscricao;
 }
+
+
+int menu_associacao_estudantes (void)
+{
+     int opcao;
+     do
+        {
+        printf("\n\tEscolha a Associacao de Estudantes:\n\n");
+        printf("1 - AE / ESECS.\n");
+        printf("2 - AE / ESTG.\n");
+        printf("3 - AE / ESSLei.\n");
+        printf("4 - AE / ESAD.\n");
+        printf("5 - AE / ESTM.\n\n");
+        scanf("%d", &opcao);
+        }
+        while (opcao < 1 || opcao > 5);
+    return opcao;
+}
+
+int escolha_associacao (int opcao)
+{
+
+        switch(opcao)
+        {
+        case 1:
+            printf("AE / ESECS");
+            break;
+
+        case 2:
+            printf("AE / ESTG");
+            break;
+
+        case 3:
+            printf("AE / ESSLei");
+            break;
+
+        case 4:
+            printf("AE / ESAD");
+            break;
+
+        case 5:
+            printf("AE / ESTM");
+            break;
+
+        default:
+            printf("\nDigite uma opcao valida!\n");
+        }
+}
+
+
+
+
+
+/*void gravar_ficheiro(participantes vet_parti[], int id_parti, atividades vet_ativi[], int id_ativi, inscricoes vet_inscri[], int id_inscri)
+{
+    FILE *ficheiro;
+    ficheiro = fopen("save.bin","wb");
+    if (ficheiro == NULL)
+        printf("Nao foi possivel criar o ficheiro!");
+    else
+    {
+        fwrite(&id_parti, sizeof(int), 1, ficheiro);
+        fwrite(vet_parti, sizeof(participantes), id_parti, ficheiro);
+        fwrite(&id_ativi, sizeof(int), 1, ficheiro);
+        fwrite(vet_ativi, sizeof(atividades), id_ativi, ficheiro);
+        fwrite(&id_inscri, sizeof(int), 1, ficheiro);
+        fwrite(vet_inscri, sizeof(inscricoes), id_inscri, ficheiro);
+        fclose(ficheiro);
+        printf("\nEscrita dos dados de %d alunos, %d atividades, %d inscricoes em ficheiro com sucesso.",
+               id_parti, id_ativi, id_inscri);
+    }
+}
+void ler_ficheiro(participantes vet_parti[], int *id_parti, atividades vet_ativi[], int *id_ativi, inscricoes vet_inscri[], int *id_inscri)
+{
+    int numero_parti_lido, numero_ativi_lido, numero_inscri_lido;
+    FILE *ficheiro;
+    ficheiro = fopen("save.bin","rb");
+    if (ficheiro == NULL)
+        printf("Nao foi possivel abrir o ficheiro!");
+    else
+    {
+        fread(&*id_parti, sizeof(int), 1, ficheiro);
+        numero_parti_lido = fread(vet_parti, sizeof(participantes), *id_parti, ficheiro);
+
+        fread(&*id_ativi, sizeof(int), 1, ficheiro);
+        numero_ativi_lido = fread(vet_ativi, sizeof(atividades), *id_ativi, ficheiro);
+
+        fread(&*id_inscri, sizeof(int), 1, ficheiro);
+        numero_inscri_lido = fread(vet_inscri, sizeof(inscricoes), *id_inscri, ficheiro);
+
+        fclose(ficheiro);
+        if (numero_parti_lido != *id_parti || numero_ativi_lido != *id_ativi || numero_inscri_lido != *id_inscri)
+        {
+            *id_parti = 0;
+            *id_ativi = 0;
+            *id_inscri = 0;
+            printf("Erro na leitura de dados do ficheiro!");
+        }
+        else
+            printf("\nLeitura dos dados de %d participantes, %d atividades e %d inscricoes de ficheiro com sucesso.", *id_parti, *id_ativi, *id_inscri);
+        }
+
+}*/
